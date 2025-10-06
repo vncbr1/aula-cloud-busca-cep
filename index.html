@@ -6,157 +6,141 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
   <title>Busca CEP</title>
 
-  <!-- CSS  -->
+  <!-- CSS: Links para estilização do CSS como fontes, background, cores, etc.  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
   <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
 </head>
+<!-- aqui vai ficar a parte que vai aparecer na tela-->
 
 <body>
-  <nav class="light-blue lighten-1" role="navigation">
-    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
+
+  <nav class="light-red lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo"><img
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9FYRFHankGx0x8pEX7aJG6QBvgYdyndPm_w&s" alt="Logo"
+          style="height: 64px;"></a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="#">Navbar Link</a></li>
+        <li><a href="#">Busca Cep</a></li>
       </ul>
 
       <ul id="nav-mobile" class="sidenav">
-        <li><a href="#">Navbar Link</a></li>
+        <li><a href="#">Busca Cep</a></li>
 
       </ul>
       <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
     </div>
   </nav>
+
+
+  <!-- loading -->
+  <div class="loading center">
+    <div class="preloader-wrapper big active">
+      <div class="spinner-layer spinner-blue-only">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="section no-pad-bot" id="index-banner">
     <div class="container">
 
-      <body>
+      <div class="row">
+        <div class="col s12">
+          <ul class="tabs">
+            <li class="tab col s3"><a id="cep-link" class="active" href="#tab-cep">CEP</a></li>
+            <li class="tab col s3"><a id="rua-link" href="#tab-rua">RUA</a></li>
+            <li class="tab col s3"><a id="log-link" onclick="listarLogs()" href="#tab-log">LOG</a></li>
+          </ul>
+        </div>
+        <!-- tab do cep -->
+        <div id="tab-cep" class="col s12">
+          <label for="cep">CEP</label>
 
-        <div class="row">
-          <div class="col s12">
-            <ul class="tabs">
-              <li class="tab col s3"><a href="#test1">CEP</a></li>
-              <li class="tab col s3"><a class="active" href="#test2">RUA</a></li>
-            </ul>
-          </div>
-          <!-- tab do cep -->
-          <div id="test1" class="col s12">
-            <label for="cep">CEP</label>
+          <input type="number" placeholder="Digite seu CEP" name="cep" id="cep">
+          <!-- <button >Buscar</button> -->
+           <!--Cria um evento no botão Buscar indo direto na função buscaCepFetch-->
+          <a onclick="buscaCepFetch()" class="waves-effect waves-light btn red"><i
+              class="material-icons left">search</i>Buscar</a>
+          <!-- <a onclick="buscaCepAjax()" class="waves-effect waves-light btn"><i
+              class="material-icons left">search</i>Buscar
+            Ajax</a>
+          <a onclick="buscaCepAxios()" class="waves-effect waves-light btn"><i
+              class="material-icons left">search</i>Buscar Axios oi</a> -->
+          <ul class="collection">
+            <li class="collection-item">RUA: <span id="dadoRua"></span></li>
+            <li class="collection-item">BAIRRO: <span id="dadoBairro"></span></li>
+            <li class="collection-item">CIDADE: <span id="dadoCidade"></span></li>
+            <li class="collection-item">ESTADO: <span id="dadoEstado"></span></li>
+          </ul>
 
-            <input type="number" placeholder="Digite seu CEP" name="cep" id="cep">
-            <!-- <button >Buscar</button> -->
-            <a onclick="buscaCepFetch()" class="waves-effect waves-light btn"><i
-                class="material-icons left">search</i>Buscar Fetch</a>
-            <a onclick="buscaCepAjax()" class="waves-effect waves-light btn"><i
-                class="material-icons left">search</i>Buscar
-              Ajax</a>
-            <a onclick="buscaCepAxios()" class="waves-effect waves-light btn"><i
-                class="material-icons left">search</i>Buscar Axios oi</a>
-            <ul class="collection">
-              <li class="collection-item"></li>RUA: <span id="dadoRua"></span></li>
-              <li class="collection-item"></li>BAIRRO: <span id="dadoBairro"></span></li>
-              <li class="collection-item"></li>CIDADE: <span id="dadoCidade"></span></li>
-              <li class="collection-item"></li>ESTADO: <span id="dadoEstado"></span></li>
-            </ul>
-
-          </div>
-
-          <!-- tab da rua -->
-          <div id="test2" class="col s12">
-            <input type="text">
-            <input type="text">
-            <input type="text">
-            <button>Evniar</button>
-          </div>
         </div>
 
-        
+        <!-- Formulário para buscar endereço por rua -->
+        <!-- Seleção de estado e cidade -->
+        <div id="tab-rua" class="col s12">
+          <div class="row">
+            <div class="input-field col s6">
+              <select onchange="pegarCidades()" id="estado" class="browser-default"></select>
+            </div>
+            <div class="input-field col s6">
+              <select id="cidade" class="browser-default"></select>
+            </div>
+            <div class="input-field col s6">
+              <i class="material-icons prefix red-text">location_on </i>
+              <input id="rua" type="tel" class="validate">
+              <label for="rua">Rua</label>
+            </div>
+            <div class="input-field col s6">
+              <a onclick="buscaRua()" class="waves-effect waves-light btn red"><i
+                  class="material-icons right">search</i>Enviar</a>
+            </div>
+          </div>
 
-        <!-- Compiled and minified JavaScript -->
-        <!--  Scripts-->
-        <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-        <script src="js/materialize.js"></script>
-        <script src="js/init.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
-        
-        <!-- minha lógica -->
-        <script>
-          // PEGANDO COM FETCH
-          async function buscaCepFetch() {
-            let cep = document.querySelector("input").value
-            console.log("buscando cep", cep)
+          <div id="lista-ruas">
+            aqui vai aparecer varias ruas
+          </div>
 
-            let url = await "https://viacep.com.br/ws/" + cep + "/json/"
-            let url2 = await `https://viacep.com.br/ws/${cep}/json/`
+        </div>
 
-            // usando fetch
+        <!-- tab do log -->
+        <div id="tab-log" class="col s12">
+          <ul class="collection" id="lista-logs"></ul>
+        </div>
 
-            fetch(url)
-              .then((res) => {
-                console.log('resposta aqui', res)
-                return res.json()
-              })
-              .then((cep) => {
-                console.log(cep.logradouro)
-                document.querySelector("#dadoRua").innerText = cep.logradouro
-                document.querySelector("#dadoBairro").innerText = cep.bairro
-                document.querySelector("#dadoCidade").innerText = cep.localidade
-                document.querySelector("#dadoEstado").innerText = cep.uf
-              })
+      </div>
 
-          }
+      <!--  Scripts Externos -  -->
+      <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script src="js/materialize.js"></script>
+      <script src="js/init.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
 
+      <!-- MEUS SCRIPTS DO CEP -->
 
-          // PEGANDO COM AJAX
-          async function buscaCepAjax() {
-            let cep = document.querySelector("input").value
-            console.log("buscando cep", cep)
+      <script src="/js/scripts/cep/buscaCepFetch.js"></script>
 
-            let url = await "https://viacep.com.br/ws/" + cep + "/json/"
-            let url2 = await `https://viacep.com.br/ws/${cep}/json/`
+      <!-- MEUS SCRIPT DE RUA -->
+      <script src="/js/scripts/rua/buscaRua.js"></script>
+      <script src="/js/scripts/rua/pegarCidades.js"></script>
+      <script src="/js/scripts/rua/pegarEstados.js"></script>
 
-            // usando ajax
+      <!-- MEUS SCRIPT DE LOG -->
+      <script src="/js/scripts/log/salvarLogs.js"></script>
+      <script src="/js/scripts/log/listarLogs.js"></script>
+      <script src="/js/scripts/log/montarLogs.js"></script>
+      <script>
+        $(".preloader-wrapper").hide(); // ESCONDE O LOADING
+      </script>
 
-            $.ajax({
-              url: url,
-              method: 'GET',
-              success: function (data) {
-                console.log(data); // Manipula os dados recebidos
-                document.querySelector("#dadoRua").innerText = data.logradouro
-                document.querySelector("#dadoBairro").innerText = data.bairro
-                document.querySelector("#dadoCidade").innerText = data.localidade
-                document.querySelector("#dadoEstado").innerText = data.uf
-              },
-              error: function (jqXHR, textStatus, errorThrown) {
-                console.error('Erro na requisição:', textStatus, errorThrown);
-              }
-            });
+</body>
 
-          }
-
-
-          // PEGANDO COM AXIOS
-          async function buscaCepAxios() {
-            let cep = document.querySelector("input").value
-            console.log("buscando cep", cep)
-
-            let url = await "https://viacep.com.br/ws/" + cep + "/json/"
-            let url2 = await `https://viacep.com.br/ws/${cep}/json/`
-
-            // usando axios
-            axios.get(url)
-              .then(function (response) {
-                // handle success
-                console.log('imprimindo com axios', response.data);
-                let cep = response.data
-                document.querySelector("#dadoRua").innerText = cep.logradouro
-                document.querySelector("#dadoBairro").innerText = cep.bairro
-                document.querySelector("#dadoCidade").innerText = cep.localidade
-                document.querySelector("#dadoEstado").innerText = cep.uf
-              })
-
-          }
-        </script>
-
-      </body>
 </html>
