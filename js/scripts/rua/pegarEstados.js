@@ -16,3 +16,4 @@ function pegarEstados() { // FUNÇÃO CRIADA PARA PEGAR OS ESTADOS
     })
 }
 pegarEstados()
+pegarEstados() 

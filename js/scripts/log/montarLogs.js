@@ -3,6 +3,7 @@ function montarLogs(url) {
     let params = url.split("/")
     console.log(params)
     
+
     if (params.length == 7) {
         document.querySelector("#cep-link").click()
         document.querySelector("#cep").value = params[4]
